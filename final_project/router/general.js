@@ -1,3 +1,7 @@
+/*
+  Routs with a general user can access
+*/
+
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
@@ -7,21 +11,9 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-
-  //same as friends.js POST request, lines 30-43
-
-  if (req.body.email) {
-    // Create or update friend's details based on provided email
-    friends[req.body.email] = {
-        "firstName": req.body.firstName,
-        "lastName": req.body.lastName,
-        "DOB": req.body.DOB
-    };
-  }
-  // Send response indicating user addition
-  res.send("The user" + (' ') + (req.body.firstName) + (' ') + (req.body.lastName) + " Has been added!");
-
+  // Insert code here
 });
+
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -29,18 +21,21 @@ public_users.get('/',function (req, res) {
   res.send(JSON.stringify(books,null,10));
 });
 
+
+//practice project, friends.js lines 20-27
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //practice project, friends.js lines 20-27
   const book = req.params.isbn;
   res.send(books[book]);
  });
   
+
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   const authorName = req.params.author;
   res.send(books[authorName]);
 });
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
@@ -48,10 +43,12 @@ public_users.get('/title/:title',function (req, res) {
   res.send(books[bookTitle]);
 });
 
+
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
   res.send(books[isbn].reviews);
 });
+
 
 module.exports.general = public_users;

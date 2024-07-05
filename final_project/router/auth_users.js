@@ -1,12 +1,16 @@
+/* 
+
+Routes that an authorized user can access
+
+
+*/
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-// practice project referenced for all code
-// practice project: https://github.com/LucanWizardry/nodejs_PracticeProject_AuthUserMgmt.git
-
-let users = [];
+let customer = [];
 
 const isValid = (username)=>{ //returns boolean
   // write code to check is the username is valid

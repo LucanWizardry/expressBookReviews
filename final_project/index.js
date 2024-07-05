@@ -1,3 +1,8 @@
+/*
+  practice project referenced for all code
+  practice project: https://github.com/LucanWizardry/nodejs_PracticeProject_AuthUserMgmt.git
+*/
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const session = require('express-session')
@@ -7,11 +12,18 @@ const genl_routes = require('./router/general.js').general;
 const app = express();
 
 app.use(express.json());
-
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
+/*  
+    Hint: Use the session authorization feature
+    (implemented in the Practice project lab)
+    to authenticate a user based on the access token
+    
+    Practice project index.js, line 42-60   
+*/
+
 app.use("/customer/auth/*", function auth(req,res,next){
-  //Practice project index.js, line 42-60
+  // Check if customer is logged in and has valid access token
   if (req.session.authorization) {
     let token = req.session.authorization['accessToken'];
 
