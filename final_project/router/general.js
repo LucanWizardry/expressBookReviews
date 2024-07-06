@@ -19,6 +19,7 @@ public_users.post("/register", (req,res) => {
 public_users.get('/',function (req, res) {
   //referencing practice project exercise 2, friends.js lines 12-18
   res.send(JSON.stringify(books,null,10));
+  //res.send("hello there");
 });
 
 
