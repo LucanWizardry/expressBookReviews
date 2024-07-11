@@ -76,42 +76,44 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 // Practice project, friends.js lines 43-73
+// referenced discussion forum: https://www.coursera.org/learn/developing-backend-apps-with-nodejs-and-express/discussions/forums/6ceCzmdZEe2BdBJXrx375w/threads/mrUhSuO5Ee2f_gpjj07RGQ
 regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    const review = req.params.review;
-    const customer = req.session.accessToken; // get access token as customer username
+    let book = books[isbn]; // fetch book within array
+    let review = req.query.review;
+    const customer = req.session.authorization['username']; // get username
 
-    let bookReviews = books[isbn].reviews; // review array
-
-    //check if isbn and review are provided
-    if (isbn && review) {
-        if (review) { // if review is not empty
-            //update reviews
-            bookReviews.push( {"customer":customer, 
-                                "review":review } );
+    
+    if (isbn) { // if isbn can be found
+        if (review) { // if review is valid
+            //update review
+            book['reviews'][customer] = review;
+            books[isbn] = book;
+            res.send('Review has been added for book ${isbn}');
         } else {
             // error if review is empty
-            return res.status(404).json({ message: 'Unable to input review' });
+            return res.status(404).json({ message: 'Unable to input review: ${review}' });
         }
-        res.send(books[book]);
     } 
     else {
         //error statement if book doesn't exist
-        return res.status(404).json({ message: 'Error inputting review.' });
+        return res.status(404).json({ message: 'Book ${isbn} cannot be found' });
     }
 });
 
+
 // delete a book review
+// practice project friends.js, lines 76-90
 regd_users.delete("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    const username = req.session.accessToken;
+    let book = books[isbn];
+    const customer = req.session.authorization['username']; // get username
 
-    isbn.forEach((review) => {
-        if(books[isbn]){
+    delete book['reviews'][customer];
 
-        }
-    })
+    res.send('Review deleted.');
 });
+  
 
 
 module.exports.authenticated = regd_users;
