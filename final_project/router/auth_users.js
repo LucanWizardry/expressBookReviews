@@ -9,8 +9,9 @@ const regd_users = express.Router();
 
 let users = [];
 
+// validate username
+// practice project index.js, lines 8-20
 const isValid = (username) => { //returns boolean
-    // same functionality as the doesExist function in the practice project, lines 8-20 on index.js
 
     // filter customers array for any users with the same username
     let userswithname = users.filter((user) => {
@@ -25,14 +26,13 @@ const isValid = (username) => { //returns boolean
     }  
 }
 
-
-const authenticatedUser = (username,password)=>{ //returns boolean
-    // write code to check if username and password match the one we have in records.
-    // same functionality as authenticatedUser function in practice project, line 22-34
+// validate username and password
+// practice project index.js, line 22-34
+const authenticatedUser = (username,password) => { //returns boolean
 
     // filter users array for matching username and password
     let validusers = users.filter((user) => {
-    return (user.username === username && user.password === password);
+        return (user.username === username && user.password === password);
     });
 
     // return true if user found, otherwise return false
@@ -78,20 +78,39 @@ regd_users.post("/login", (req,res) => {
 // Practice project, friends.js lines 43-73
 regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    let book = books[isbn];
+    const review = req.params.review;
+    const customer = req.session.accessToken; // get access token as customer username
 
-    if (book) { //check if book exists
-        let title = req.body.title;
+    let bookReviews = books[isbn].reviews; // review array
 
-        if (review) { //update reviews
-            book[review] = review;
+    //check if isbn and review are provided
+    if (isbn && review) {
+        if (review) { // if review is not empty
+            //update reviews
+            bookReviews.push( {"customer":customer, 
+                                "review":review } );
+        } else {
+            // error if review is empty
+            return res.status(404).json({ message: 'Unable to input review' });
         }
-        res.send('${review} has been added to the book, ${title}.');
+        res.send(books[book]);
     } 
     else {
-        //error statement if 
-        res.send('Unable to find book with isbn ${isbn}');
+        //error statement if book doesn't exist
+        return res.status(404).json({ message: 'Error inputting review.' });
     }
+});
+
+// delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+    const username = req.session.accessToken;
+
+    isbn.forEach((review) => {
+        if(books[isbn]){
+
+        }
+    })
 });
 
 

@@ -19,10 +19,10 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
     (implemented in the Practice project lab)
     to authenticate a user based on the access token
     
-    Practice project index.js, line 42-60   
+    practice project index.js, line 42-60   
 */
 
-app.use("/customer/auth/*", function auth(req,res,next){
+app.use("/customer/auth/*", function auth(req,res,next) {
     // Check if customer is logged in and has valid access token
     if (req.session.authorization) {
         let token = req.session.authorization['accessToken'];
